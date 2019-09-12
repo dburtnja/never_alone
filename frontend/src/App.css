@@ -4,5 +4,25 @@
 
 .map-container {
   height: 100vh;
+  z-index: -1;
   width: 100%;
 }
+
+#add-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 50px;
+}
+
+/*.search-bar {*/
+/*  background-color: lightgray;*/
+/*  position: absolute;*/
+/*  left: 10px;*/
+/*  top: 10px;*/
+/*}*/
+
+/*#avatar {*/
+/*  position: absolute;*/
+/*  right: 30px;*/
+/*  top: 15px;*/
+/*}*/
