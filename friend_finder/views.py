@@ -55,4 +55,22 @@ def create_user(request):
     user_data = User.objects.create(**request_data)
     return JsonResponse({"id": user_data.id})
 
+def get_events(request):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"])
+
+    events = Event.objects.all()
+    if len(events) == 0:
+        return HttpResponseNotFound()
+
+    events_data = []
+    for ev in events:
+        event = {
+        "event_id": ev.id,
+        "coordinates": ev.place.location
+        }
+        events_data.append(event)
+    return JsonResponse({
+        "events": events_data
+    })
 
