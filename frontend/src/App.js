@@ -16,11 +16,11 @@ function App(props) {
       {/*    className={'map-container'}*/}
       {/*    initialCenter={{ lat: 49.843880, lng: 24.024524}}*/}
       {/*/>*/}
-      <Grid container direction={'row'}>
-          <Grid container justify={'flex-start'}>
+      <Grid container direction={'row'} justify={'space-between'}>
+          <Grid item alignSelf={'flex-start'}>
             <SearchBar />
           </Grid>
-          <Grid container justify={'flex-end'}>
+          <Grid item alignSelf={'flex-end'}>
             <UserAvatar />
           </Grid>
       </Grid>

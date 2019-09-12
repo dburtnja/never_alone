@@ -4,10 +4,11 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from '@material-ui/core/InputAdornment';
 import './SearchBar.css';
 
-function SearchBar({className}) {
+function SearchBar() {
         return (
             <div className={'search-bar'}>
                 <TextField
+                    style ={{width: '40vh'}}
                     InputProps={{
                         startAdornment: <InputAdornment position="start"> <Search/> </InputAdornment>,
                     }}
