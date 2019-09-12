@@ -3,7 +3,8 @@ import pyrebase
 from friend_finder.models import Place, User, Event
 from django.views.generic.base import TemplateView
 from django.http import JsonResponse, \
-    HttpResponseNotFound, HttpResponseBadRequest, HttpResponseNotAllowed
+    HttpResponseNotFound, HttpResponseBadRequest, HttpResponseNotAllowed,\
+    HttpResponse
 import json
 from .models import User
 from django.views.decorators.csrf import csrf_exempt
@@ -101,3 +102,22 @@ def create_user(request):
     return JsonResponse({"id": user_data.id})
 
 
+@csrf_exempt
+def follow_event(request):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
+
+    if not request.body:
+        return HttpResponseNotFound()
+
+    request_data = json.loads(request.body)
+    required_fields = ["user_id", "event_id"]
+    if not all(field_name in request_data for field_name in required_fields):
+        return HttpResponseBadRequest("Required fields: " + str(required_fields))
+
+    event = Event.objects.get(pk=request_data["event_id"])
+    user = User.objects.get(pk=request_data["user_id"])
+    event.people_amount.add(user)
+    event.save()
+
+    return HttpResponse(status=200)
