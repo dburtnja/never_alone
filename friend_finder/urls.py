@@ -2,5 +2,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.BaseView.as_view(), name='post_list'),
+    path('', views.json_test_request, name='test_request'),
 ]
