@@ -11,7 +11,18 @@ from datetime import datetime, timedelta
 from django.utils.timezone import make_aware
 
 
+
 # Create your views here.
+
+
+def get_required_fields(model):
+    fields = model._meta.get_fields()
+    required_fields = []
+
+    for field in fields:
+        if hasattr(field, 'blank') and field.blank is False:
+            required_fields.append(field.name)
+    return required_fields
 
 
 def get_user(request):
@@ -30,10 +41,6 @@ def get_user(request):
         "status": user_data.status,
         "picture": user_data.image_url
     })
-
-
-def json_test_request(request):
-    return JsonResponse({"request body": "request.body"})
 
 
 def get_event_info(request):
@@ -85,6 +92,7 @@ def get_required_fields(model):
     return required_fields
 
 
+
 @csrf_exempt
 def create_user(request):
     if request.method != "POST":
@@ -100,4 +108,23 @@ def create_user(request):
     user_data = User.objects.create(**request_data)
     return JsonResponse({"id": user_data.id})
 
+
+def get_events(request):
+    if request.method != "GET":
+        return HttpResponseNotAllowed(["GET"])
+
+    events = Event.objects.all()
+    if len(events) == 0:
+        return HttpResponseNotFound()
+
+    events_data = []
+    for ev in events:
+        event = {
+        "event_id": ev.id,
+        "coordinates": ev.place.location
+        }
+        events_data.append(event)
+    return JsonResponse({
+        "events": events_data
+    })
 

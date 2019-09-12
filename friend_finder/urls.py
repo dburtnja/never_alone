@@ -9,4 +9,5 @@ urlpatterns = [
          name='get_user_current_events'),
     path(r'follow_event/', views.follow_event, name='follow_event'),
     path(r"create_user", views.create_user, name='create_user'),
+    path(r"get_events", views.get_events, name='get_events'),
 ]
