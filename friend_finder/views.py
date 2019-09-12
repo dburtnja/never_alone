@@ -26,6 +26,13 @@ def get_required_fields(model):
     return required_fields
 
 
+def all_required_present(model, request_data):
+    reqired_fields = get_required_fields(model)
+    if not all(field_name in request_data for field_name in reqired_fields):
+        return False
+    return True
+
+
 def get_user(request):
     if request.method != "GET":
         return HttpResponseNotAllowed(["GET"])
@@ -83,17 +90,6 @@ def get_user_current_events(request):
         return HttpResponseNotFound()
 
 
-def get_required_fields(model):
-    fields = model._meta.get_fields()
-    required_fields = []
-
-    for field in fields:
-        if hasattr(field, 'blank') and field.blank is False:
-            required_fields.append(field.name)
-    return required_fields
-
-
-
 @csrf_exempt
 def create_user(request):
     if request.method != "POST":
@@ -102,8 +98,9 @@ def create_user(request):
     if not request.body:
         return HttpResponseNotFound()
     request_data = json.loads(request.body)
-    reqired_fields = get_required_fields(User)
-    if not any(field_name in request_data for field_name in reqired_fields):
+
+    if not all_required_present(User, request_data):
+        reqired_fields = get_required_fields(User)
         return HttpResponseBadRequest("Required fields: " + str(reqired_fields))
 
     user_data = User.objects.create(**request_data)
@@ -149,3 +146,41 @@ def get_events(request):
     return JsonResponse({
         "events": events_data
     })
+
+
+@csrf_exempt
+def create_event(request):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
+
+    if not request.body:
+        return HttpResponseNotFound("Body is empty")
+    request_data = json.loads(request.body)
+
+    if "place" not in request_data:
+        return HttpResponseBadRequest("No place key in request!")
+
+    place_data = request_data.pop("place")
+
+    if not all_required_present(Place, place_data):
+        place_required_fields = get_required_fields(Place)
+        return HttpResponseBadRequest("Required place fields: " + str(place_required_fields))
+
+    if "id" not in request_data:
+        return HttpResponseBadRequest("Id field is required")
+
+    place_obj = Place.objects.create(**place_data)
+    user_obj = User.objects.filter(id=request_data.pop("id"))
+    event_data = {
+        **request_data,
+        "creator": user_obj,
+        "place": place_obj,
+        "people_amount": user_obj
+    }
+
+    if not all_required_present(Event, event_data):
+        event_required_fields = get_required_fields(Event)
+        return HttpResponseBadRequest("Required fields: " + str(event_required_fields))
+
+    event_object = Event.objects.create(**event_data)
+    return JsonResponse({"id": event_object.id})
