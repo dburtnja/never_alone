@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.gis.db import models
 
 
 class Place(models.Model):
@@ -14,8 +13,12 @@ class Place(models.Model):
 
 
 class User(models.Model):
-    name = models.CharField(max_length=64, unique=True)
-    description = models.CharField(max_length=256, blank=True, null=True)
+    name = models.CharField(max_length=64)
+    surname = models.CharField(max_length=64)
+    mail = models.CharField(max_length=64, unique=True)
+    image_url = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=64)
+    id_token = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -24,9 +27,11 @@ class User(models.Model):
 class Event(models.Model):
     name = models.CharField(max_length=64, unique=True)
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
-    user = models.ManyToManyField(User, on_delete=models.CASCADE())
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField()
-    description = models.CharField(max_length=256, blank=True, null=True)
+    note = models.CharField(max_length=256, blank=True, null=True)
+    people_amount = models.IntegerField(blank=True, null=True)
+    drinks_amount = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.name

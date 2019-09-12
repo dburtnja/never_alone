@@ -26,3 +26,6 @@ yarn-error.log*
 .idea/
 friend_finder/__pycache__/
 never_alone/__pycache__/
+friend_finder/migrations/__pycache__/
+db.sqlite3
+
