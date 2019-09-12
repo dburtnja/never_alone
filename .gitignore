@@ -21,3 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.gitignore~
+.idea/
+friend_finder/__pycache__/
+never_alone/__pycache__/
