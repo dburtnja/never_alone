@@ -6,6 +6,7 @@ import DatePickers from "./components/DatePicker";
 import NumberInput from "./components/NumberInput";
 import Grid from "@material-ui/core/Grid";
 import './CreateEvent.css';
+import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
 function CreateEvent() {
@@ -14,6 +15,8 @@ function CreateEvent() {
         people: '',
         note: '',
         date: '',
+        drinksAmount: '',
+        locationName: '',
         finished: false,
     });
 
@@ -30,6 +33,30 @@ function CreateEvent() {
         return (<Redirect to={'/app'} />);
     }
 
+    const payload = {
+        id: 0,
+        name: values.name,
+        timestamp: values.date,
+        note: values.note,
+        drinks_amount: '',
+        place: {
+            name: values.locationName
+        }
+    };
+
+    const send = () => {
+        fetch('http://localhost:8000/create_event', {
+           method: "POST",
+           mode: 'no-cors',
+            headers: new Headers(
+                {"Content-Type": "application/json",
+                    "Accept":"application/json"}
+            ),
+            body: JSON.stringify(payload),
+        }).then(response => console.log(response))
+            .catch(err => console.error(err));
+    };
+
 
     return (
         <Paper className={'root-paper'}>
@@ -45,6 +72,14 @@ function CreateEvent() {
                 <Grid item>
                     <Search searchIconEnabled={false} />
                 </Grid>
+                <TextField
+                    id="filled-name"
+                    label="Name"
+                    value={values.name}
+                    onChange={handleChange('name')}
+                    margin="normal"
+                    variant="filled"
+                />
                 <Grid item>
                     <DatePickers
                         title={'Date'}
@@ -57,6 +92,13 @@ function CreateEvent() {
                         onChange={handleChange('people')}
                         value={values.people}
                         title={'Amount of people'}
+                    />
+                </Grid>
+                <Grid item>
+                    <NumberInput
+                        onChange={handleChange('drinksAmount')}
+                        value={values.drinksAmount}
+                        title={'Amount of drinks'}
                     />
                 </Grid>
                 <Grid item>

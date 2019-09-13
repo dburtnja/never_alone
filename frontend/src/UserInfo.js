@@ -39,7 +39,9 @@ export default class UserInfo extends React.Component {
                         <GoogleLogout
                             clientId="462660016574-il9iogu20ltdqar1q7lulveka6lua3cb.apps.googleusercontent.com"
                             buttonText="Logout"
-                            onLogoutSuccess={() => {alert('You was logged out')}}
+                            onLogoutSuccess={() => {
+                                localStorage.removeItem('token');
+                            alert('You was logged out')}}
                         />
                     </Grid>
                 </Grid>
