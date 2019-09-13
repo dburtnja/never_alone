@@ -1,10 +1,10 @@
 import React from 'react';
-import styles from './App.css';
+import './App.css';
 import {GoogleApiWrapper, Map} from 'google-maps-react';
 import Fab from "@material-ui/core/Fab";
 import UserAvatar from "./UserAvatar";
 import Grid from "@material-ui/core/Grid";
-import SearchBar from "./SearchBar";
+import Search from "./Search";
 import AddIcon from '@material-ui/icons/Add';
 
 function App(props) {
@@ -18,7 +18,7 @@ function App(props) {
       {/*/>*/}
       <Grid container direction={'row'} justify={'space-between'}>
           <Grid item alignSelf={'flex-start'}>
-            <SearchBar />
+            <Search />
           </Grid>
           <Grid item alignSelf={'flex-end'}>
             <UserAvatar />
