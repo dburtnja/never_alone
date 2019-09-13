@@ -4,23 +4,17 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from '@material-ui/core/InputAdornment';
 import './SearchBar.css';
 
-function SearchBar(inputProps) {
-    const { inputRef = () => {}, ref, ...other } = inputProps;
-
+function SearchBar(props) {
     return (
             <div className={'search-bar'}>
                 <TextField
                     style ={{width: '40vh'}}
                     InputProps={{
-                        inputRef: node => {
-                            ref(node);
-                            inputRef(node);
-                        },
                         startAdornment: <InputAdornment position="start"> <Search/> </InputAdornment>,
                     }}
-
+                    value={props.value}
+                    onChange={props.onChange}
                     label={'Places'}
-                    {...other}
                 />
             </div>
         );

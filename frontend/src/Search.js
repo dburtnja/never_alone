@@ -1,94 +1,49 @@
-import React from "react";
+import React from "react"
+import ReactGoogleMapLoader from "react-google-maps-loader"
+import ReactGooglePlacesSuggest from "react-google-places-suggest";
 import SearchBar from "./SearchBar";
-import Autosuggest from 'react-autosuggest';
-import PlacesAutocomplete, {
-    geocodeByAddress,
-    getLatLng,
-} from 'react-places-autocomplete';
 
-// const getSuggestions = value => {
-//     const inputValue = value.trim().toLowerCase();
-//     const inputLength = inputValue.length;
-//
-//     return inputLength === 0 ? [] : ['one'];
-// };
-
-// choose correct option from request
-const getSuggestionValue = suggestion => suggestion.label;
-
+const API_KEY = "AIzaSyD-pIXF-3kG9zM9OEuE9UiEVAeTE2uTLIo";
 export default class Search extends React.Component {
-    constructor(props) {
-        super(props);
+    state = {
+        search: "",
+        value: "",
+    };
 
-        this.state = {
-          value: '',
-          suggestions: []
-        };
+    handleInputChange(e) {
+        this.setState({search: e.target.value, value: e.target.value})
     }
 
-    handleChange = address => {
-      this.setState({
-          value: address
-      });
-    };
-
-    handleSelect = address => {
-        console.log('called');
-      geocodeByAddress(address)
-          .then(results => getLatLng(results[0]))
-          .then(latLng => console.log('Success', latLng))
-          .catch(error => console.error('Error', error));
-    };
-
-    renderSuggestion = () => (
-        <PlacesAutocomplete
-            value={this.state.value}
-            onChange={this.handleChange}
-            onSelect={this.handleSelect}
-            />
-    );
-
-    onChange = (event, {newValue}) => {
-        // this.setState({
-        //     value: newValue
-        // });
-        this.handleChange(newValue);
-    };
-
-    // load data from Google Places API
-    onSuggestionsFetchRequested = ({value}) => {
-        console.log('olololo');
-        this.setState({
-            suggestions: this.handleSelect(value)
-        });
-    };
-
-    // ok
-    onSuggestionClearRequested = () => {
-      this.setState({
-          suggestions: []
-      })
-    };
+    handleSelectSuggest(suggest) {
+        console.log(suggest);
+        this.setState({search: "", value: suggest.formatted_address})
+    }
 
     render() {
-        const {value, suggestions} = this.state;
-
-        const inputProps = {
-          placeholder: 'Places',
-          value,
-          onChange: this.onChange
-        };
-
+        const {search, value} = this.state
         return (
-            <Autosuggest
-                renderInputComponent={SearchBar}
-                suggestions={suggestions}
-                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={this.onSuggestionClearRequested}
-                getSuggestionValue={getSuggestionValue}
-                renderSuggestion={this.renderSuggestion}
-                inputProps={inputProps}
+            <ReactGoogleMapLoader
+                params={{
+                    key: API_KEY,
+                    libraries: "places,geocode",
+                }}
+                render={googleMaps =>
+                    googleMaps && (
+                        <div>
+                            <ReactGooglePlacesSuggest
+                                autocompletionRequest={{input: search}}
+                                googleMaps={googleMaps}
+                                onSelectSuggest={this.handleSelectSuggest.bind(this)}
+                            >
+                                <SearchBar
+                                    value={value}
+                                    onChange={this.handleInputChange.bind(this)}
+                                />
+                            </ReactGooglePlacesSuggest>
+                        </div>
+                    )
+                }
             />
-        );
+        )
     }
 }
