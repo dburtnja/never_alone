@@ -7,6 +7,7 @@ import Login from './Login';
 import * as serviceWorker from './serviceWorker';
 import CreateEvent from "./CreateEvent";
 import UserInfo from "./UserInfo";
+import Warning from './Warning';
 
 function Paths() {
 
@@ -24,6 +25,8 @@ function Paths() {
       <Router>
           <Route exact path={'/'} render={isLoggedIn} />
           <Route path={'/app'} component={App} />
+          <Route path={'/warning'} component={Warning} />
+          <Route path={'/warningFailed'} component={Warning} />
           <Route path={'/login'} component={Login}/>
           <Route path={'/create-event'} component={CreateEvent} />
           <Route path={'/settings'} component={UserInfo} />
