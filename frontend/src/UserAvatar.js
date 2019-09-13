@@ -3,11 +3,18 @@ import Avatar from "@material-ui/core/Avatar";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import {Typography} from "@material-ui/core";
+import { Redirect } from 'react-router-dom'
 
 export default class UserAvatar extends React.Component {
 
     loadUserInfo() {
         let data = JSON.parse(localStorage.getItem('userData'));
+        if (data === null) {
+            return {
+                'nameSurname': "Incognito",
+                'image': ""
+            };
+        }
         return {
             'nameSurname': data.ig,
             'image': data.Paa

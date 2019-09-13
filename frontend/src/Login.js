@@ -12,11 +12,13 @@ class Login extends React.Component{
         };
     }
 
-    handleLogin(googleUser) {
+    handleLogin = (googleUser) => {
         localStorage.setItem('token', googleUser.getId());
         localStorage.setItem('userData', JSON.stringify(googleUser.getBasicProfile()));
-        console.log(googleUser.getBasicProfile());
-    }
+        this.setState({
+            redirect: true
+        })
+    };
 
     render() {
         if (this.state.redirect) {
