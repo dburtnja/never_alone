@@ -154,10 +154,12 @@ def get_events(request):
     events_data = []
     for ev in events:
         event = {
-        "event_id": ev.id,
-        "coordinates": ev.place.location
+            "event_id": ev.id,
+            "coordinates": ev.place.location,
+            "drinks_amount": ev.drinks_amount,
         }
         events_data.append(event)
+
     return JsonResponse({
         "events": events_data
     })
