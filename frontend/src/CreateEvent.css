@@ -1,0 +1,10 @@
+.root-paper {
+    box-shadow: 0 3px 12px 0 rgba(129,129,129,0.50);
+    position: fixed; /* or absolute */
+    width: 50%;
+    height: 50%;
+    overflow: auto;
+    margin: auto;
+    top: 0; left: 0; bottom: 0; right: 0;
+    padding: 20px 30px 35px 20px;
+}

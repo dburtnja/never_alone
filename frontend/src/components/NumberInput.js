@@ -1,4 +1,4 @@
-import {makeStyles} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import React from "react";
 
@@ -25,9 +25,9 @@ function NumberInput(props) {
     return (
         <TextField
             id="filled-number"
-            label="Number"
-            value={props.people}
-            onChange={props.handleChange('people')}
+            label={props.title}
+            value={props.value}
+            onChange={props.onChange}
             type="number"
             className={classes.textField}
             InputLabelProps={{

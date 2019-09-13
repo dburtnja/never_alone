@@ -6,6 +6,7 @@ import App from './App';
 import Login from './Login';
 import * as serviceWorker from './serviceWorker';
 import CreateEvent from "./CreateEvent";
+import UserInfo from "./UserInfo";
 
 function Paths() {
 
@@ -25,6 +26,7 @@ function Paths() {
           <Route path={'/app'} component={App} />
           <Route path={'/login'} component={Login}/>
           <Route path={'/create-event'} component={CreateEvent} />
+          <Route path={'/settings'} component={UserInfo} />
       </Router>
     );
 }

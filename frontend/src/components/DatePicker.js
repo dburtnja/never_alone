@@ -14,15 +14,17 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function DatePickers() {
+function DatePickers(props) {
     const classes = useStyles();
 
     return (
         <form className={classes.container} noValidate>
             <TextField
                 id="date"
-                label="Birthday"
+                label={props.title}
                 type="date"
+                onChange={props.onChange}
+                value={props.value}
                 defaultValue="2019-09-13"
                 className={classes.textField}
                 InputLabelProps={{

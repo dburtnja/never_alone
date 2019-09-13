@@ -15,7 +15,7 @@ export default class UserAvatar extends React.Component {
     }
 
     render() {
-        const {nameSurname, image} = this.loadUserInfo()
+        const {nameSurname, image} = this.loadUserInfo();
         return (
           <div id={'avatar'}>
               {/* eslint-disable-next-line react/jsx-no-undef */}

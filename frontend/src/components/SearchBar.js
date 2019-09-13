@@ -45,10 +45,3 @@ function SearchBar(props) {
         );
 }
 export default SearchBar
-
-// {/* inputRef: node => {*/}
-// {/*    ref(node);*/}
-// {/*      inputRef(node);*/}
-// {/* },*/}
-
-//{/* {...other}*/}

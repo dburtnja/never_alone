@@ -13,12 +13,12 @@ import CreateEvent from "./CreateEvent";
 function App(props) {
   return (
       <div id={'app-root'}>
-      {/*  <Map*/}
-      {/*    google={props.google}*/}
-      {/*    zoom={8}*/}
-      {/*    className={'map-container'}*/}
-      {/*    initialCenter={{ lat: 49.843880, lng: 24.024524}}*/}
-      {/*/>*/}
+        <Map
+          google={props.google}
+          zoom={8}
+          className={'map-container'}
+          initialCenter={{ lat: 49.843880, lng: 24.024524}}
+      />
       <Grid container direction={'row'} justify={'space-between'}>
           <Grid item alignSelf={'flex-start'}>
             <Search searchIconEnabled={true} />
@@ -45,9 +45,9 @@ function App(props) {
   );
 }
 
-export default App;
+// export default App;
 
-// export default GoogleApiWrapper({
-//   apiKey: 'AIzaSyD-pIXF-3kG9zM9OEuE9UiEVAeTE2uTLIo'
-// })(App);
-//                {/*<Redirect to={'/create-event'} />*/}
+export default GoogleApiWrapper({
+  apiKey: 'AIzaSyD-pIXF-3kG9zM9OEuE9UiEVAeTE2uTLIo'
+})(App);
+               // {/*<Redirect to={'/create-event'} />*/}
