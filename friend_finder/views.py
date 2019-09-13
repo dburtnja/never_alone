@@ -12,7 +12,6 @@ from datetime import datetime, timedelta
 from django.utils.timezone import make_aware
 
 
-
 # Create your views here.
 
 
@@ -31,6 +30,15 @@ def all_required_present(model, request_data):
     if not all(field_name in request_data for field_name in reqired_fields):
         return False
     return True
+
+
+def check_unexpected_fields(model, data):
+    fields = [field.name for field in model._meta.get_fields()]
+
+    for key in data.keys():
+        if key not in fields:
+            return True, key
+    return False, None
 
 
 def get_user(request):
@@ -103,6 +111,13 @@ def create_user(request):
         reqired_fields = get_required_fields(User)
         return HttpResponseBadRequest("Required fields: " + str(reqired_fields))
 
+    if len(User.objects.filter(nick=request_data.get("nick"))) > 0:
+        return HttpResponseBadRequest(f"Nickname already exist: '{request_data.get('nick')}'.")
+
+    error, unexpected_fields = check_unexpected_fields(User, request_data)
+    if error:
+        return HttpResponseBadRequest(f"Unexpected field name present: '{unexpected_fields}'.")
+
     user_data = User.objects.create(**request_data)
     return JsonResponse({"id": user_data.id})
 
@@ -169,18 +184,37 @@ def create_event(request):
     if "id" not in request_data:
         return HttpResponseBadRequest("Id field is required")
 
-    place_obj = Place.objects.create(**place_data)
-    user_obj = User.objects.filter(id=request_data.pop("id"))
+    error, unexpected_fields = check_unexpected_fields(Place, place_data)
+    if error:
+        return HttpResponseBadRequest(f"Unexpected field name present: '{unexpected_fields}'.")
+    places_list = Place.objects.filter(location=place_data.get("location"))
+    if len(places_list) == 0:
+        place_obj = Place.objects.create(**place_data)
+    else:
+        place_obj = places_list[0]
+
+    user_id = request_data.pop("id")
+    user_obj_list = User.objects.filter(id=user_id)
+    if len(user_obj_list) < 1:
+        return HttpResponseBadRequest(f"No such user id: '{user_id}'.")
     event_data = {
         **request_data,
-        "creator": user_obj,
+        "creator": user_obj_list[0],
         "place": place_obj,
-        "people_amount": user_obj
     }
 
     if not all_required_present(Event, event_data):
         event_required_fields = get_required_fields(Event)
         return HttpResponseBadRequest("Required fields: " + str(event_required_fields))
 
+    error, unexpected_fields = check_unexpected_fields(Event, event_data)
+    if error:
+        return HttpResponseBadRequest(f"Unexpected field name present: '{unexpected_fields}'.")
+
+    events_list = Event.objects.filter(name=event_data.get("name"))
+    if len(events_list) != 0:
+        return HttpResponseBadRequest(f"Event with name '{event_data.get('name')}' already exist.")
+
     event_object = Event.objects.create(**event_data)
+    event_object.people_amount.add(event_object.creator)
     return JsonResponse({"id": event_object.id})
