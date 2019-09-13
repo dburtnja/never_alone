@@ -1,14 +1,18 @@
 import React from "react"
 import ReactGoogleMapLoader from "react-google-maps-loader"
 import ReactGooglePlacesSuggest from "react-google-places-suggest";
-import SearchBar from "./SearchBar";
+import SearchBar from "./components/SearchBar";
+import {Paper} from "@material-ui/core";
 
 const API_KEY = "AIzaSyD-pIXF-3kG9zM9OEuE9UiEVAeTE2uTLIo";
 export default class Search extends React.Component {
-    state = {
-        search: "",
-        value: "",
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            search: "",
+            value: "",
+        };
+    }
 
     handleInputChange(e) {
         this.setState({search: e.target.value, value: e.target.value})
@@ -20,8 +24,9 @@ export default class Search extends React.Component {
     }
 
     render() {
-        const {search, value} = this.state
+        const {search, value} = this.state;
         return (
+            <Paper>
             <ReactGoogleMapLoader
                 params={{
                     key: API_KEY,
@@ -38,12 +43,14 @@ export default class Search extends React.Component {
                                 <SearchBar
                                     value={value}
                                     onChange={this.handleInputChange.bind(this)}
+                                    iconEnabled={this.props.searchIconEnabled}
                                 />
                             </ReactGooglePlacesSuggest>
                         </div>
                     )
                 }
             />
+            </Paper>
         )
     }
 }

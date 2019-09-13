@@ -1,8 +1,16 @@
 import React from 'react';
 import './Login.css';
 import GoogleLogin from 'react-google-login';
+import {Redirect} from 'react-router-dom';
 
-export default class Login extends React.Component{
+class Login extends React.Component{
+    constructor(props) {
+        super(props);
+
+        this.state = {
+          redirect: localStorage.getItem('token') !== null
+        };
+    }
 
     handleLogin(googleUser) {
         localStorage.setItem('token', googleUser.getId());
@@ -11,6 +19,10 @@ export default class Login extends React.Component{
     }
 
     render() {
+        if (this.state.redirect) {
+            return (<Redirect push to={'/app'}/>);
+        }
+
         return (
             <div className={'login-part'}>
                 <h3 id={'sign-in-text'} className={'text-center'}> Sign in </h3>
@@ -25,3 +37,5 @@ export default class Login extends React.Component{
     }
 
 }
+
+export default Login;
