@@ -20,7 +20,7 @@ export default class Search extends React.Component {
 
     handleSelectSuggest(suggest) {
         console.log(suggest);
-
+        console.log(this.props);
         this.setState({search: "", value: suggest.formatted_address})
     }
 

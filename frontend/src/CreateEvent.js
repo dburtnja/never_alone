@@ -7,6 +7,8 @@ import NumberInput from "./components/NumberInput";
 import Grid from "@material-ui/core/Grid";
 import './CreateEvent.css';
 import TextField from "@material-ui/core/TextField";
+// import {} from 'react-google-places-suggest'
+import { geocodeByAddress } from 'react-places-autocomplete';
 import Button from "@material-ui/core/Button";
 
 function CreateEvent() {
@@ -30,22 +32,24 @@ function CreateEvent() {
     };
 
     if (values.finished) {
+        console.log("adadawd");
         return (<Redirect to={'/app'} />);
     }
 
     const payload = {
-        id: 0,
+        id: 1,
         name: values.name,
         timestamp: values.date,
         note: values.note,
         drinks_amount: '',
         place: {
-            name: values.locationName
+            name: values.locationName,
+            location: geocodeByAddress(values.locationName)
         }
     };
 
     const send = () => {
-        fetch('http://localhost:8000/create_event', {
+        fetch('http://localhost:8000/create_event/', {
            method: "POST",
            mode: 'no-cors',
             headers: new Headers(
@@ -53,7 +57,8 @@ function CreateEvent() {
                     "Accept":"application/json"}
             ),
             body: JSON.stringify(payload),
-        }).then(response => console.log(response))
+        })
+            .then(response => console.log(response))
             .catch(err => console.error(err));
     };
 
@@ -69,8 +74,19 @@ function CreateEvent() {
                 <Grid item>
                     <Typography variant={'h3'} > Create event  </Typography>
                 </Grid>
+                <Grid>
+                    <TextField
+                        required
+                        id="standard-required"
+                        label="Name event"
+                        defaultValue=""
+                        margin="normal"
+                    />
+                </Grid>
                 <Grid item>
-                    <Search searchIconEnabled={false} />
+                    <Search searchIconEnabled={false}
+                            value={values.locationName}
+                    />
                 </Grid>
                 <TextField
                     id="filled-name"
@@ -105,7 +121,7 @@ function CreateEvent() {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={(event) => { handleChange('finished') }}
+                        onClick={(event) => { send(); handleChange('finished') }}
                     >
                         Done
                     </Button>
